@@ -11,66 +11,42 @@ spec:
     Prints the diff of the resource when it changes.
   platforms:
   - selector:
-      matchExpressions:
-      - key: "os"
-        operator: "In"
-        values:
-        - darwin
-      - key: "arch"
-        operator: "In"
-        values:
-        - arm64
+      matchLabels:
+        os: darwin
+        arch: arm64
     uri: https://github.com/alexmt/kubectl-watch-diff/releases/download/v0.1.0/watchdiff-darwin-arm64.zip
     sha256: f425e728e52d6fee3e68228448dfc763d4757494276b4216230120cb2a27bb27
     files:
-    - from: "watchdiff"
-      to: "watchdiff"
+    - from: "*"
+      to: "."
     bin: watchdiff
   - selector:
-      matchExpressions:
-      - key: "os"
-        operator: "In"
-        values:
-        - linux
-      - key: "arch"
-        operator: "In"
-        values:
-        - arm64
+      matchLabels:
+        os: linux
+        arch: arm64
     uri: https://github.com/alexmt/kubectl-watch-diff/releases/download/v0.1.0/watchdiff-linux-arm64.zip
     sha256: 38e50b7f0208d94cc57248550b8fd47cfba75a04a2a12dfbe17746a7ddcdd069
     files:
-    - from: "watchdiff"
-      to: "watchdiff"
+    - from: "*"
+      to: "."
     bin: watchdiff
   - selector:
-      matchExpressions:
-      - key: "os"
-        operator: "In"
-        values:
-        - darwin
-      - key: "arch"
-        operator: "In"
-        values:
-        - amd64
+      matchLabels:
+        os: darwin
+        arch: amd64
     uri: https://github.com/alexmt/kubectl-watch-diff/releases/download/v0.1.0/watchdiff-darwin-amd64.zip
     sha256: 859da4af29e37f5c1455d9ccb9ce6eea36a7e524cc2d5e4058a6d4b46418a88d
     files:
-    - from: "watchdiff"
-      to: "watchdiff"
+    - from: "*"
+      to: "."
     bin: watchdiff
   - selector:
-      matchExpressions:
-      - key: "os"
-        operator: "In"
-        values:
-        - linux
-      - key: "arch"
-        operator: "In"
-        values:
-        - amd64
+      matchLabels:
+        os: linux
+        arch: amd64
     uri: https://github.com/alexmt/kubectl-watch-diff/releases/download/v0.1.0/watchdiff-linux-amd64.zip
     sha256: d266424f2392ea162a309fef2b6ae42c35084b6702c683365b8e5ff53e295d5e
     files:
-    - from: "watchdiff"
-      to: "watchdiff"
+    - from: "*"
+      to: "."
     bin: watchdiff
