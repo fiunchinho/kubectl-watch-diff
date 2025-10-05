@@ -27,20 +27,33 @@ func writeYaml(data []byte) (*os.File, error) {
 }
 
 func closeAndDelete(f *os.File) {
-
+	name := f.Name()
+	f.Close()
+	os.Remove(name)
 }
 
 func main() {
 	if len(os.Args) < 3 {
-		println("Usage: " + os.Args[0] + " <resource> <name>")
+		println("Usage: " + os.Args[0] + " <resource> <name> [namespace]")
 		os.Exit(1)
 	}
-	cmd := exec.Command("kubectl", "get", "-w", os.Args[1], os.Args[2], "-o=json")
-	cmd.Stderr = os.Stderr
 
+	resource := os.Args[1]
+	name := os.Args[2]
+	namespace := ""
+	if len(os.Args) > 3 {
+		namespace = os.Args[3]
+	}
+
+	args := []string{"get", "-w", resource, name, "-o=json"}
+	if namespace != "" {
+		args = append(args, "-n", namespace)
+	}
+
+	cmd := exec.Command("kubectl", args...)
+	cmd.Stderr = os.Stderr
 	stdout, err := cmd.StdoutPipe()
 	checkErr(err)
-
 	checkErr(cmd.Start())
 
 	var prev []byte
@@ -51,6 +64,7 @@ func main() {
 		checkErr(dec.Decode(&obj))
 		data, err := yaml.Marshal(obj)
 		checkErr(err)
+
 		if prev == nil {
 			prev = data
 		} else {
@@ -64,10 +78,12 @@ func main() {
 			checkErr(err)
 			nextFile, err := writeYaml(data)
 			checkErr(err)
-			cmd := exec.Command("diff", "-u", prevFile.Name(), nextFile.Name())
-			cmd.Stdout = os.Stdout
-			cmd.Stderr = os.Stderr
-			_ = cmd.Run()
+
+			diff := exec.Command("diff", "-u", prevFile.Name(), nextFile.Name())
+			diff.Stdout = os.Stdout
+			diff.Stderr = os.Stderr
+			_ = diff.Run()
+
 			closeAndDelete(prevFile)
 			closeAndDelete(nextFile)
 		}
